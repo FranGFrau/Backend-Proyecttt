@@ -1,0 +1,15 @@
+[
+    {
+        "author": {
+            "id": "test@gmail.com",
+            "nombre": "yo",
+            "apellido": "GF",
+            "edad": "27",
+            "alias": "Yo mismo",
+            "avatar": "sdasdasd"
+        },
+        "text": "testeo de rebuild",
+        "date": "7/9/2022 22:57:11",
+        "id": 1
+    }
+]
