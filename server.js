@@ -7,9 +7,10 @@ const argv = minimist(process.argv.slice(2));
 const PORT = argv.puerto || argv.PUERTO || argv.port || argv.PORT || 8080;
 const mode = argv.mode || argv.MODE || argv.modo || argv.MODO || "FORK";
 
-//MongoD
+//MongoDb
 mongoose.connect(
-  `mongodb+srv://Frauseano:${process.env.MONGO_PASS}@frangfdbs.vnwag.mongodb.net/?retryWrites=true&w=majority`
+  `mongodb+srv://Frauseano:${process.env.MONGO_PASS}@frangfdbs.vnwag.mongodb.net/?retryWrites=true&w=majority`,
+  () => console.log("Conectado a mongo")
 );
 
 if (cluster.isPrimary && mode == "CLUSTER") {

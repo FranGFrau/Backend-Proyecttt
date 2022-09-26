@@ -6,18 +6,13 @@ import productRouter from "./Routers/productRouter.js";
 import messageRouter from "./Routers/messageRouter.js";
 import infoRouter from "./Routers/infoRouter.js";
 import randomRouter from "./Routers/randomRouter.js";
-import Contenedor from "./Repositories/GenericRepository.js";
-import { chatSchema } from "./utils/normalizrSchemas.js";
 import session from "express-session";
 import passport from "./utils/passport.js";
 import MongoStore from "connect-mongo";
-import normalizr from "normalizr";
 import dotenv from "dotenv";
 import flash from "connect-flash";
 import { invalidRouteLogger } from "./middlewares/routeLogger.js";
-
-const contenedorProductos = new Contenedor("./db/products.json");
-const contenedorMensajes = new Contenedor("./db/messages.json");
+import { getConnection } from "./Controllers/websocketController.js";
 
 const app = express();
 dotenv.config();
@@ -30,7 +25,6 @@ app.use(
       mongoUrl: `mongodb+srv://Frauseano:${process.env.MONGO_PASS}@frangfdbs.vnwag.mongodb.net/?retryWrites=true&w=majority`,
       mongoOptions: {
         useNewUrlParser: true,
-        useUnifiedTopology: true,
       },
     }),
     secret: "qwerty",
@@ -65,34 +59,6 @@ app.on("error", (err) => console.log(err));
 const httpServer = new HTTPServer(app);
 const io = new IOServer(httpServer);
 
-io.on("connection", async (socket) => {
-  const productos = await contenedorProductos.getAll();
-  const arrayMensajes = await contenedorMensajes.getAll();
-  const mensajes = normalizr.normalize(
-    { messages: arrayMensajes, id: "chat" },
-    chatSchema
-  );
-
-  socket.emit("productos", productos);
-  socket.emit("mensajes", mensajes);
-
-  socket.on("productoPost", async (producto) => {
-    const productos = await contenedorProductos.save(producto);
-    io.sockets.emit("productos", productos);
-  });
-
-  socket.on("mensajePost", async (mensaje) => {
-    const arrayMensajes = await contenedorMensajes.save({
-      ...mensaje,
-      date: new Date(Date.now()).toLocaleString(),
-    });
-    const mensajes = normalizr.normalize(
-      { messages: arrayMensajes, id: "chat" },
-      chatSchema
-    );
-
-    io.sockets.emit("mensajes", mensajes);
-  });
-});
+io.on("connection", getConnection(io));
 
 export default httpServer;
