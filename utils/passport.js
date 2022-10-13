@@ -1,4 +1,4 @@
-import passport from "passport";
+import passport from "koa-passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import User from "../Models/UserModel.js";
 import { isValidPassword, encryptPassword } from "./password.js";
@@ -28,7 +28,7 @@ passport.use(
   "signup",
   new LocalStrategy(
     {
-      passReqToCallback: true
+      passReqToCallback: true,
     },
     (req, username, password, done) => {
       User.findOne({ username }, (err, user) => {
@@ -43,7 +43,7 @@ passport.use(
 
         const newUser = {
           username,
-          password: encryptPassword(password)
+          password: encryptPassword(password),
         };
 
         User.create(newUser, (err, userWithId) => {

@@ -36,5 +36,23 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.3.0"
-  }
+  },
+  "name": "backend-proyecttt",
+  "version": "1.0.0",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FranGFrau/Backend-Proyecttt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FranGFrau/Backend-Proyecttt/issues"
+  },
+  "homepage": "https://github.com/FranGFrau/Backend-Proyecttt#readme",
+  "description": ""
 }
